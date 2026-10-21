@@ -25,7 +25,7 @@ public class Student {
         return name;
     }
 
-    public String getClassName() { 
+    public String getClassName() {
         return className;
     }
 }
