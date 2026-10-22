@@ -1,5 +1,6 @@
 package com.thinh.studentmanagement.controller;
 
+
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.thinh.studentmanagement.dto.StudentRequest;
+import com.thinh.studentmanagement.exception.DuplicateStudentNoException;
 import com.thinh.studentmanagement.model.Student;
 import com.thinh.studentmanagement.repository.StudentRepository;
 
@@ -30,6 +32,9 @@ public class StudentController {
 
     @PostMapping("/api/students")
     public ResponseEntity<Student> createStudent(@Valid @RequestBody StudentRequest request) {
+        if (studentRepository.findByStudentNo(request.studentNo()).isPresent()) {
+            throw new DuplicateStudentNoException(request.studentNo());
+        }
         Student created = studentRepository.save (
             request.studentNo(),
             request.name(),
