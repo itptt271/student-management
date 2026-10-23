@@ -2,3 +2,8 @@ INSERT OR IGNORE INTO students (student_no, name, class_name) VALUES
     ('255P001', '青木 翔太', 'IT 2年'),
     ('255P002', 'グエン ヴァン アン', 'IT 2年'),
     ('255P005', 'ファン トゥアン ティン', 'IT 2年');
+
+INSERT OR IGNORE INTO courses (name, teacher_name, class_name, total_sessions) VALUES
+    ('JAVA', 'A先生', 'IT 2年', 5),
+    ('日本語', 'B先生', 'IT 2年', 6),
+    ('実践学習', 'C先生', 'IT 2年', 7);
