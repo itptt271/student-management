@@ -13,3 +13,11 @@ CREATE TABLE IF NOT EXISTS courses (
     total_sessions  INTEGER NOT NULL,
     UNIQUE (name, class_name)
 );
+
+CREATE TABLE IF NOT EXISTS class_sessions (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_id   INTEGER NOT NULL REFERENCES courses(id),
+    session_no  INTEGER NOT NULL,
+    date        TEXT    NOT NULL,
+    UNIQUE (course_id, session_no)
+);
