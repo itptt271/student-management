@@ -7,3 +7,8 @@ INSERT OR IGNORE INTO courses (name, teacher_name, class_name, total_sessions) V
     ('JAVA', 'A先生', 'IT 2年', 5),
     ('日本語', 'B先生', 'IT 2年', 6),
     ('実践学習', 'C先生', 'IT 2年', 7);
+
+INSERT OR IGNORE INTO class_sessions (course_id, session_no, date) VALUES
+    (1, 1, '2026-04-09'),
+    (2, 3, '2026-04-12'),
+    (3, 4, '2026-04-25');
