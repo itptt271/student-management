@@ -21,3 +21,11 @@ CREATE TABLE IF NOT EXISTS class_sessions (
     date        TEXT    NOT NULL,
     UNIQUE (course_id, session_no)
 );
+
+CREATE TABLE IF NOT EXISTS attendance (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id  INTEGER NOT NULL REFERENCES students(id),
+    session_id  INTEGER NOT NULL REFERENCES class_sessions(id),
+    status      TEXT    NOT NULL CHECK (status IN ('PRESENT', 'LATE', 'EARLY_LEAVE', 'ABSENT', 'OFFICIAL_ABSENCE')),
+    UNIQUE (student_id, session_id)
+);
