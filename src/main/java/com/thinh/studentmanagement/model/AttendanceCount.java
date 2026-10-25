@@ -9,5 +9,6 @@ public record AttendanceCount(
         int lateCount,
         int earlyLeaveCount,
         int absentCount,
-        int officialAbsenceCount) {
+        int officialAbsenceCount
+) {
 }
