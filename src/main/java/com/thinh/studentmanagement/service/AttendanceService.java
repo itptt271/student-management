@@ -24,4 +24,13 @@ public class AttendanceService {
         int lateDeduction = count.lateCount() / LATE_COUNT_PER_DEDUCTION;
         return count.presentCount() + count.officialAbsenceCount() + count.lateCount() - lateDeduction;
     }
+
+    public double calculateAttendanceRate(int attendedSessions, int totalSessions) {
+        if (totalSessions == 0) {
+            return 0.0;
+        }
+
+        double rate = (double) attendedSessions / totalSessions * 100;
+        return Math.round(rate * 10) / 10.0;
+    }
 }
