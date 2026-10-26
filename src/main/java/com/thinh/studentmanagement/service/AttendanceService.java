@@ -1,9 +1,11 @@
 package com.thinh.studentmanagement.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.thinh.studentmanagement.dto.AttendanceSummary;
 import com.thinh.studentmanagement.model.AttendanceCount;
 import com.thinh.studentmanagement.repository.AttendanceRepository;
 
@@ -16,8 +18,23 @@ public class AttendanceService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    public List<AttendanceCount> findCountsByStudent() {
-        return attendanceRepository.findCountsByStudent();
+    public List<AttendanceSummary> getSummaries() {
+        List<AttendanceCount> counts = attendanceRepository.findCountsByStudent();
+        List<AttendanceSummary> summaries = new ArrayList<>();
+
+        for (AttendanceCount count : counts) {
+            int attended = calculateAttendedSessions(count);
+            double rate = calculateAttendanceRate(attended, count.total());
+            summaries.add(new AttendanceSummary(
+                count.studentNo(),
+                count.name(),
+                count.total(),
+                attended,
+                count.lateCount(),
+                rate
+            ));
+        }
+        return summaries;
     }
 
     public int calculateAttendedSessions(AttendanceCount count) {
