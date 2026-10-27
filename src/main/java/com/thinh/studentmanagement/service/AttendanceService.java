@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.thinh.studentmanagement.dto.AttendanceRequest;
 import com.thinh.studentmanagement.dto.AttendanceSummary;
+import com.thinh.studentmanagement.exception.DuplicateAttendanceException;
 import com.thinh.studentmanagement.model.AttendanceCount;
 import com.thinh.studentmanagement.repository.AttendanceRepository;
 
@@ -36,11 +38,18 @@ public class AttendanceService {
                     totalHours,
                     absentHours,
                     count.lateCount() + count.earlyLeaveCount(),
-                    rate
-            ));
+                    rate));
         }
 
         return summaries;
+    }
+
+    public void record(AttendanceRequest request) {
+        if (attendanceRepository.exists(request.studentId(), request.sessionId())) {
+            throw new DuplicateAttendanceException(request.studentId(), request.sessionId());
+        }
+
+        attendanceRepository.save(request.studentId(), request.sessionId(), request.status());
     }
 
     public int calculateAbsentHours(AttendanceCount count) {
