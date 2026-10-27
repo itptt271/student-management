@@ -11,8 +11,11 @@ import com.thinh.studentmanagement.repository.AttendanceRepository;
 
 @Service
 public class AttendanceService {
+
+    private static final int HOURS_PER_SESSION = 2;
+    private static final int LATE_EARLY_COUNT_PER_ABSENCE = 3;
+
     private final AttendanceRepository attendanceRepository;
-    private static final int LATE_COUNT_PER_DEDUCTION = 3;
 
     public AttendanceService(AttendanceRepository attendanceRepository) {
         this.attendanceRepository = attendanceRepository;
@@ -23,31 +26,35 @@ public class AttendanceService {
         List<AttendanceSummary> summaries = new ArrayList<>();
 
         for (AttendanceCount count : counts) {
-            int attended = calculateAttendedSessions(count);
-            double rate = calculateAttendanceRate(attended, count.total());
+            int totalHours = count.total() * HOURS_PER_SESSION;
+            int absentHours = calculateAbsentHours(count);
+            double rate = calculateAttendanceRate(totalHours - absentHours, totalHours);
+
             summaries.add(new AttendanceSummary(
-                count.studentNo(),
-                count.name(),
-                count.total(),
-                attended,
-                count.lateCount(),
-                rate
+                    count.studentNo(),
+                    count.name(),
+                    totalHours,
+                    absentHours,
+                    count.lateCount() + count.earlyLeaveCount(),
+                    rate
             ));
         }
+
         return summaries;
     }
 
-    public int calculateAttendedSessions(AttendanceCount count) {
-        int lateDeduction = count.lateCount() / LATE_COUNT_PER_DEDUCTION;
-        return count.presentCount() + count.officialAbsenceCount() + count.lateCount() - lateDeduction;
+    public int calculateAbsentHours(AttendanceCount count) {
+        int lateEarlyCount = count.lateCount() + count.earlyLeaveCount();
+        int absentSessions = count.absentCount() + lateEarlyCount / LATE_EARLY_COUNT_PER_ABSENCE;
+        return absentSessions * HOURS_PER_SESSION;
     }
 
-    public double calculateAttendanceRate(int attendedSessions, int totalSessions) {
-        if (totalSessions == 0) {
+    public double calculateAttendanceRate(int attendedHours, int totalHours) {
+        if (totalHours == 0) {
             return 0.0;
         }
 
-        double rate = (double) attendedSessions / totalSessions * 100;
+        double rate = (double) attendedHours / totalHours * 100;
         return Math.round(rate * 10) / 10.0;
     }
 }
