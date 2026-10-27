@@ -48,4 +48,10 @@ public class AttendanceRepository {
         String sql = "INSERT INTO attendance (student_id, session_id, status) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, studentId, sessionId, status.name());
     }
+
+    public boolean exists(Long studentId, Long sessionId) {
+        String sql = "SELECT COUNT(*) FROM attendance WHERE student_id = ? AND session_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, studentId, sessionId);
+        return count != null && count > 0;
+    }
 }
