@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.thinh.studentmanagement.model.AttendanceCount;
+import com.thinh.studentmanagement.model.AttendanceStatus;
 
 @Repository
 public class AttendanceRepository {
@@ -41,5 +42,10 @@ public class AttendanceRepository {
                 GROUP BY student_id, students.student_no, students.name
                 """;
         return jdbcTemplate.query(sql, ATTENDANCE_COUNT_ROW_MAPPER);
+    }
+
+    public void save(Long studentId, Long sessionId, AttendanceStatus status) {
+        String sql = "INSERT INTO attendance (student_id, session_id, status) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, studentId, sessionId, status.name());
     }
 }
