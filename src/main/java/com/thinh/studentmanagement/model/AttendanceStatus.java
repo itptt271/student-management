@@ -5,7 +5,7 @@ public enum AttendanceStatus {
     LATE,
     EARLY_LEAVE,
     ABSENT,
-    OFFICAL_ABSENCE;
+    OFFICIAL_ABSENCE;
 
     public String getJapaneseName() {
         switch (this) {
@@ -17,7 +17,7 @@ public enum AttendanceStatus {
                 return "早退";
             case ABSENT:
                 return "欠席";
-            case OFFICAL_ABSENCE:
+            case OFFICIAL_ABSENCE:
                 return "公欠";
             default:
                 return "";
