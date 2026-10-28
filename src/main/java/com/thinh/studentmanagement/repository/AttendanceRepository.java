@@ -54,4 +54,16 @@ public class AttendanceRepository {
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, studentId, sessionId);
         return count != null && count > 0;
     }
+
+    public boolean studentExists(Long studentId) {
+        String sql = "SELECT COUNT(*) FROM students WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, studentId);
+        return count != null && count > 0;
+    }
+
+    public boolean sessionExists(Long sessionId) {
+        String sql = "SELECT COUNT(*) FROM class_sessions WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, sessionId);
+        return count != null && count > 0;
+    }
 }
