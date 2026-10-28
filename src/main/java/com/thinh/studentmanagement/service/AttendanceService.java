@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.thinh.studentmanagement.dto.AttendanceRequest;
 import com.thinh.studentmanagement.dto.AttendanceSummary;
 import com.thinh.studentmanagement.exception.DuplicateAttendanceException;
+import com.thinh.studentmanagement.exception.ResourceNotFoundException;
 import com.thinh.studentmanagement.model.AttendanceCount;
 import com.thinh.studentmanagement.repository.AttendanceRepository;
 
@@ -47,6 +48,14 @@ public class AttendanceService {
     }
 
     public void record(AttendanceRequest request) {
+        if (!attendanceRepository.studentExists(request.studentId())) {
+            throw new ResourceNotFoundException("指定された学生が見つかりません");
+        }
+
+        if (!attendanceRepository.sessionExists(request.sessionId())) {
+            throw new ResourceNotFoundException("指定された授業が見つかりません");
+        }
+
         if (attendanceRepository.exists(request.studentId(), request.sessionId())) {
             throw new DuplicateAttendanceException(request.studentId(), request.sessionId());
         }
