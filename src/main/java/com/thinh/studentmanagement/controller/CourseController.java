@@ -3,8 +3,10 @@ package com.thinh.studentmanagement.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.thinh.studentmanagement.model.ClassSession;
 import com.thinh.studentmanagement.model.Course;
 import com.thinh.studentmanagement.service.CourseService;
 
@@ -19,5 +21,10 @@ public class CourseController {
     @GetMapping("/api/courses")
     public List<Course> getAllCourses() {
         return courseService.findAll();
+    }
+
+    @GetMapping ("/api/courses/{courseId}/sessions")
+    public List<ClassSession> getSessions(@PathVariable Long courseId) {
+        return courseService.findSessions(courseId);
     }
 }
